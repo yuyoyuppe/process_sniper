@@ -81,18 +81,23 @@ fn load_config() -> Config {
 fn main() {
     register_signal_handlers();
 
-    let config: Config = load_config();
-    println!("Launched with {}", config);
+    let Config {
+        blacklisted_processes,
+        refresh_interval,
+    } = load_config();
+    println!(
+        "{:#?}, refresh - {}s",
+        blacklisted_processes, refresh_interval
+    );
 
     std::thread::spawn(move || {
         let mut sys = System::new_all();
         loop {
-            config
-                .blacklisted_processes
+            blacklisted_processes
                 .iter()
                 .flat_map(|proc_name| sys.process_by_name(proc_name))
                 .for_each(kill);
-            thread::sleep(time::Duration::from_secs(config.refresh_interval));
+            thread::sleep(time::Duration::from_secs(refresh_interval));
             sys.refresh_processes();
         }
     });
