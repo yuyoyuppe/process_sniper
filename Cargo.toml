@@ -5,15 +5,15 @@ edition = "2018"
 license = "MIT"
 
 [dependencies]
-anyhow = "1"
-figment = { version = "0", features = ["toml"] }
 serde = { version = "1", features = ["derive"] }
 sysinfo = "0"
+libc = "0"
+toml = "0"
+winapi = "0"
 
 [profile.release]
 opt-level = "z"
 lto = true
 codegen-units = 1
-# strip = true
 panic = "abort"
 

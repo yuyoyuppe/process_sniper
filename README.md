@@ -1,7 +1,7 @@
 # What is it?
 __Problem__: Modern <s>spyware</s> software is smart enough to hog pc's cpu/hdd only when a user is idle. It can also circumvent some security measures for its telemetry processes.
 
-__Solution__: process_sniper - 69 lines of Rust which could be run in the background to kill those processes as they're spawned.
+__Solution__: process_sniper - lightweight utility which could be run in the background to kill those processes as they're spawned.
 # How to use
 ## Build
 
