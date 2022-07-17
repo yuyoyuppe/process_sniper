@@ -4,7 +4,7 @@
 use libc::{sighandler_t, signal, SIGABRT, SIGINT, SIGTERM};
 use serde::Deserialize;
 use std::{ptr, thread, time};
-use sysinfo::{Process, ProcessExt, Signal, System, SystemExt};
+use sysinfo::{Process, ProcessExt, System, SystemExt};
 use winapi::um::winuser::{
     DispatchMessageW, GetMessageW, TranslateMessage, MSG, WM_CLOSE, WM_QUIT,
 };
@@ -35,7 +35,7 @@ impl std::fmt::Display for Config {
 }
 
 fn kill(process: &Process) {
-    if !process.kill(Signal::Kill) {
+    if !process.kill() {
         println!("Couldn't kill {}", process.name());
     }
 }
@@ -95,7 +95,7 @@ fn main() {
         loop {
             blacklisted_processes
                 .iter()
-                .flat_map(|proc_name| sys.process_by_name(proc_name))
+                .flat_map(|proc_name| sys.processes_by_name(proc_name))
                 .for_each(kill);
             thread::sleep(time::Duration::from_secs(refresh_interval));
             sys.refresh_processes();
