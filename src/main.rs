@@ -4,7 +4,7 @@
 use libc::{sighandler_t, signal, SIGABRT, SIGINT, SIGTERM};
 use serde::Deserialize;
 use std::{ptr, thread, time};
-use sysinfo::{Process, ProcessExt, System, SystemExt};
+use sysinfo::{Process, ProcessExt, System, SystemExt, ProcessRefreshKind};
 use winapi::um::winuser::{
     DispatchMessageW, GetMessageW, TranslateMessage, MSG, WM_CLOSE, WM_QUIT,
 };
@@ -18,7 +18,7 @@ struct Config {
 }
 
 fn default_interval() -> u64 {
-    3
+    8
 }
 
 fn default_processes() -> Vec<String> {
@@ -98,7 +98,8 @@ fn main() {
                 .flat_map(|proc_name| sys.processes_by_name(proc_name))
                 .for_each(kill);
             thread::sleep(time::Duration::from_secs(refresh_interval));
-            sys.refresh_processes();
+            let refresh_kind = ProcessRefreshKind::new();
+            sys.refresh_processes_specifics(refresh_kind);
         }
     });
 
